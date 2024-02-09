@@ -140,4 +140,10 @@ func main() {
 	})
 	fmt.Println(result6)
 
+	result7 := GenericMap[float64, float64](input, func(n float64) float64 {
+		return n * n
+	})
+
+	fmt.Println(result7)
+
 }
