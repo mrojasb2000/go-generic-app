@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"sort"
+	"time"
 )
 
 type Ordered interface{
@@ -94,6 +95,17 @@ func GenericFilter[T any](input []T, f func(T) bool) []T {
 	return result
 }
 
+func regularFunction(){
+	fmt.Println("just entered regularFunction()")
+	time.Sleep(5 * time.Second)
+}
+
+func gorutineFunction(){
+	fmt.Println("Just entered gorutineFunction()")
+	time.Sleep(10 * time.Second)
+	fmt.Println("goruntimeFunction finished its work")
+}
+
 func main() {
 	students := []string{}
 	result := addStudent[string](students, "Michael")
@@ -145,5 +157,10 @@ func main() {
 	})
 
 	fmt.Println(result7)
+
+	go gorutineFunction()
+	fmt.Println("In main one line below gorutineFunction()")
+	regularFunction()
+	fmt.Println("In main one line below regularFunction()")
 
 }
