@@ -65,5 +65,11 @@ func main() {
 	result = addStudent[string](result, "Elaine")
 	sort.Sort(OrdenedSlice[string](result))
 	fmt.Println(result)
-	
+
+	students1 := []int{}
+	result1 := addStudent[int](students1, 78)
+	result1 = addStudent[int](result1, 64)
+	result1 = addStudent[int](result1, 45)
+	sort.Sort(OrdenedSlice[int](result1))
+	fmt.Println(result1)
 }
