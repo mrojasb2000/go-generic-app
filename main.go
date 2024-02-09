@@ -121,10 +121,7 @@ func main() {
 
 	input := []float64{17.3, 11.1, 9.9, 4.3, 12.6}
 	result5 := MyFilter(input, func(num float64) bool {
-		if num <= 10.0 {
-			return true
-		}
-		return false
+				return num <= 10.0
 	})
 	fmt.Println(result5)
 
