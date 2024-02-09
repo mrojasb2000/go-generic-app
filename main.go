@@ -58,6 +58,14 @@ func addStudent[T any](students []T, student T)[]T {
 	return append(students, student)
 }
 
+func MyMap(input []int, f func(int) int) []int {
+	result := make([]int, len(input))
+	for index, value := range input {
+		result[index] = f(value)
+	}
+	return result
+}
+
 func main() {
 	students := []string{}
 	result := addStudent[string](students, "Michael")
@@ -81,4 +89,10 @@ func main() {
 		return s1.Age < s2.Age // comparing two Student values
 	})
 	fmt.Println(result2)
+
+	slice := []int{1,5,2,7,4}
+	result3 := MyMap(slice, func(i int) int{
+		return i * i
+	})
+	fmt.Println(result3)
 }
