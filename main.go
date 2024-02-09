@@ -84,6 +84,16 @@ func MyFilter(input []float64, f func(float64) bool)[]float64 {
 	return result
 }
 
+func GenericFilter[T any](input []T, f func(T) bool) []T {
+	var result []T
+	for _, val := range input {
+		if f(val) {
+			result = append(result, val)
+		}
+	}
+	return result
+}
+
 func main() {
 	students := []string{}
 	result := addStudent[string](students, "Michael")
@@ -124,5 +134,10 @@ func main() {
 				return num <= 10.0
 	})
 	fmt.Println(result5)
+
+	result6 := GenericFilter[float64](input, func(num float64) bool {
+		return num <= 10.0
+	})
+	fmt.Println(result6)
 
 }
