@@ -66,6 +66,14 @@ func MyMap(input []int, f func(int) int) []int {
 	return result
 }
 
+func GenericMap[T1, T2 any](input []T1, f func(T1) T2) []T2 {
+	result := make([]T2, len(input))
+	for index, value := range input {
+		result[index] = f(value)
+	}
+	return result
+}
+
 func main() {
 	students := []string{}
 	result := addStudent[string](students, "Michael")
@@ -95,4 +103,10 @@ func main() {
 		return i * i
 	})
 	fmt.Println(result3)
+
+	result4 := GenericMap[int, int](slice, func(i int)int {
+		return i * i
+	})
+	fmt.Println(result4)
+
 }
