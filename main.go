@@ -77,7 +77,7 @@ func GenericMap[T1, T2 any](input []T1, f func(T1) T2) []T2 {
 func MyFilter(input []float64, f func(float64) bool)[]float64 {
 	var result []float64
 	for _, value := range input {
-		if f(value) == true {
+		if f(value) {
 			result = append(result, value)
 		}
 	}
