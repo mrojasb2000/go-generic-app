@@ -97,12 +97,12 @@ func GenericFilter[T any](input []T, f func(T) bool) []T {
 
 func regularFunction(){
 	fmt.Println("just entered regularFunction()")
-	time.Sleep(5 * time.Second)
+	time.Sleep(10 * time.Second)
 }
 
 func gorutineFunction(){
 	fmt.Println("Just entered gorutineFunction()")
-	time.Sleep(10 * time.Second)
+	time.Sleep(5 * time.Second)
 	fmt.Println("goruntimeFunction finished its work")
 }
 
