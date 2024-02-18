@@ -2,60 +2,64 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"sort"
+	"sync"
 	"time"
 )
 
-type Ordered interface{
+type Ordered interface {
 	~int | ~float64 | ~string
 }
 
-type Student struct{
+type Student struct {
 	Name string
-	ID int
-	Age float64
+	ID   int
+	Age  float64
 }
 
 // Group of funcitons that ensure that an OrdenedSlice can be sorted
-type OrdenedSlice[T Ordered][]T // T must implement < and >
+type OrdenedSlice[T Ordered] []T // T must implement < and >
 
-func(s OrdenedSlice[T]) Len() int {
+func (s OrdenedSlice[T]) Len() int {
 	return len(s)
 }
 
-func(s OrdenedSlice[T]) Less(i, j int) bool {
+func (s OrdenedSlice[T]) Less(i, j int) bool {
 	return s[i] < s[j]
 }
 
-func(s OrdenedSlice[T]) Swap(i, j int) {
+func (s OrdenedSlice[T]) Swap(i, j int) {
 	s[i], s[j] = s[j], s[i]
 }
+
 // end group for OrdenedSlice
 
 // Group of functions that ensure that SortType can be sorted
 type SortType[T any] struct {
-	slice []T
+	slice   []T
 	compare func(T, T) bool
 }
 
-func(s SortType[T]) Len() int {
+func (s SortType[T]) Len() int {
 	return len(s.slice)
 }
 
-func(s SortType[T]) Less(i, j int) bool {
+func (s SortType[T]) Less(i, j int) bool {
 	return s.compare(s.slice[i], s.slice[j])
 }
 
-func(s SortType[T]) Swap(i, j int) {
+func (s SortType[T]) Swap(i, j int) {
 	s.slice[i], s.slice[j] = s.slice[j], s.slice[i]
 }
+
 // end of group SortType
 
 func PeformSort[T any](slice []T, compare func(T, T) bool) {
 	sort.Sort(SortType[T]{slice, compare})
 }
 
-func addStudent[T any](students []T, student T)[]T {
+func addStudent[T any](students []T, student T) []T {
 	return append(students, student)
 }
 
@@ -75,7 +79,7 @@ func GenericMap[T1, T2 any](input []T1, f func(T1) T2) []T2 {
 	return result
 }
 
-func MyFilter(input []float64, f func(float64) bool)[]float64 {
+func MyFilter(input []float64, f func(float64) bool) []float64 {
 	var result []float64
 	for _, value := range input {
 		if f(value) {
@@ -95,15 +99,45 @@ func GenericFilter[T any](input []T, f func(T) bool) []T {
 	return result
 }
 
-func regularFunction(){
+func regularFunction() {
 	fmt.Println("just entered regularFunction()")
 	time.Sleep(10 * time.Second)
 }
 
-func gorutineFunction(){
+func gorutineFunction() {
 	fmt.Println("Just entered gorutineFunction()")
 	time.Sleep(5 * time.Second)
 	fmt.Println("goruntimeFunction finished its work")
+}
+
+var wg sync.WaitGroup
+
+func outputString() {
+	defer wg.Done()
+	string := [5]string{"one", "two", "three", "four", "five"}
+	for i := 0; i < 5; i++ {
+		delay := 1 + rand.Intn(3)
+		time.Sleep(time.Duration(delay) * time.Second)
+		fmt.Println(string[i])
+	}
+}
+
+func outputInts() {
+	defer wg.Done()
+	for i := 0; i < 5; i++ {
+		delay := 1 + rand.Intn(3)
+		time.Sleep(time.Duration(delay) * time.Second)
+		fmt.Println(i)
+	}
+}
+
+func outputFloats() {
+	defer wg.Done()
+	for i := 0; i < 5; i++ {
+		delay := 1 + rand.Intn(3)
+		time.Sleep(time.Duration(delay) * time.Second)
+		fmt.Println(float64(i*i) + 0.5)
+	}
 }
 
 func main() {
@@ -130,20 +164,20 @@ func main() {
 	})
 	fmt.Println(result2)
 
-	slice := []int{1,5,2,7,4}
-	result3 := MyMap(slice, func(i int) int{
+	slice := []int{1, 5, 2, 7, 4}
+	result3 := MyMap(slice, func(i int) int {
 		return i * i
 	})
 	fmt.Println(result3)
 
-	result4 := GenericMap[int, int](slice, func(i int)int {
+	result4 := GenericMap[int, int](slice, func(i int) int {
 		return i * i
 	})
 	fmt.Println(result4)
 
 	input := []float64{17.3, 11.1, 9.9, 4.3, 12.6}
 	result5 := MyFilter(input, func(num float64) bool {
-				return num <= 10.0
+		return num <= 10.0
 	})
 	fmt.Println(result5)
 
@@ -163,4 +197,9 @@ func main() {
 	regularFunction()
 	fmt.Println("In main one line below regularFunction()")
 
+	wg.Add(3)
+	go outputString()
+	go outputInts()
+	go outputFloats()
+	wg.Wait()
 }
